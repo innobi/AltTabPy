@@ -1,6 +1,5 @@
 import json
 import logging
-from alt_tabpy_server.common.util import format_exception
 import requests
 import tornado.web
 

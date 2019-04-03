@@ -29,4 +29,4 @@ class EndpointsHandler(tornado.web.RequestHandler):
             self.send_error(400)
             self.finish()
 
-        await self._add_or_update_endpoint('add', name, 1, request_data)
+        self._add_or_update_endpoint('add', name, 1, request_data)

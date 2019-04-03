@@ -1,7 +1,5 @@
 import tornado.web
 import logging
-from alt_tabpy_server.common.messages import (
-    Query, QuerySuccessful, QueryError, UnknownURI)
 from hashlib import md5
 import uuid
 import urllib
