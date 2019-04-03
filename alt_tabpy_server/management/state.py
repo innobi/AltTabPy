@@ -8,7 +8,7 @@ from time import time
 import sys
 
 
-from tabpy_server.management.util import write_state_config
+from alt_tabpy_server.management.util import write_state_config
 
 logger = logging.getLogger(__name__)
 

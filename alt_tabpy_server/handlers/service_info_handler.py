@@ -1,5 +1,5 @@
 import json
-from tabpy_server.handlers import ManagementHandler
+from alt_tabpy_server.handlers import ManagementHandler
 
 
 class ServiceInfoHandler(ManagementHandler):

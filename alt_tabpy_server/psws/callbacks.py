@@ -2,13 +2,13 @@ import logging
 import sys
 from time import sleep
 
-from tabpy_server.common.messages import (
+from alt_tabpy_server.common.messages import (
     LoadObject, DeleteObjects, ListObjects, ObjectList)
-from tabpy_server.common.endpoint_file_mgr import cleanup_endpoint_files
-from tabpy_server.common.util import format_exception
-from tabpy_server.management.state import TabPyState, get_query_object_path
+from alt_tabpy_server.common.endpoint_file_mgr import cleanup_endpoint_files
+from alt_tabpy_server.common.util import format_exception
+from alt_tabpy_server.management.state import TabPyState, get_query_object_path
 
-from tabpy_server.management import util
+from alt_tabpy_server.management import util
 
 logger = logging.getLogger(__name__)
 

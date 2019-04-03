@@ -3,7 +3,7 @@ import tornado.web
 import json
 import logging
 
-from tabpy_server.handlers.util import handle_basic_authentication
+from alt_tabpy_server.handlers.util import handle_basic_authentication
 
 logger = logging.getLogger(__name__)
 STAGING_THREAD = concurrent.futures.ThreadPoolExecutor(max_workers=3)

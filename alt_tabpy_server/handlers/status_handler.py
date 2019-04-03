@@ -1,6 +1,6 @@
 import json
 import logging
-from tabpy_server.handlers import BaseHandler
+from alt_tabpy_server.handlers import BaseHandler
 
 
 logger = logging.getLogger(__name__)

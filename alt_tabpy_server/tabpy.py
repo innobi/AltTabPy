@@ -1,10 +1,10 @@
 import tornado.ioloop
 import tornado.web
 
-from tabpy_server.handlers import (EndpointHandler, EndpointsHandler,
-                                   EvaluationPlaneHandler, QueryPlaneHandler,
-                                   ServiceInfoHandler, StatusHandler,
-                                   UploadDestinationHandler)
+from alt_tabpy_server.handlers import (
+    EndpointHandler, EndpointsHandler, EvaluationPlaneHandler,
+    QueryPlaneHandler, ServiceInfoHandler, StatusHandler,
+    UploadDestinationHandler)
 
 
 if __name__ == '__main__':

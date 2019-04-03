@@ -6,14 +6,14 @@ For how generic endpoints requests is served look
 at endpoints_handler.py
 '''
 
-from tabpy_server.handlers import ManagementHandler
+from alt_tabpy_server.handlers import ManagementHandler
 import json
 import logging
 import tornado.web
-from tabpy_server.management.state import get_query_object_path
-from tabpy_server.common.util import format_exception
-from tabpy_server.handlers.base_handler import STAGING_THREAD
-from tabpy_server.psws.callbacks import on_state_change
+from alt_tabpy_server.management.state import get_query_object_path
+from alt_tabpy_server.common.util import format_exception
+from alt_tabpy_server.handlers.base_handler import STAGING_THREAD
+from alt_tabpy_server.psws.callbacks import on_state_change
 import shutil
 
 

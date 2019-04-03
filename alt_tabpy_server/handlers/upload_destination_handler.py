@@ -1,5 +1,5 @@
 import logging
-from tabpy_server.handlers import ManagementHandler
+from alt_tabpy_server.handlers import ManagementHandler
 import os
 
 

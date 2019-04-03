@@ -7,18 +7,18 @@ import tornado
 
 from argparse import ArgumentParser
 
-import tabpy_server
-from tabpy_server import __version__
-from tabpy_server.app.ConfigParameters import ConfigParameters
-from tabpy_server.app.util import (
+import alt_tabpy_server
+from alt_tabpy_server import __version__
+from alt_tabpy_server.app.ConfigParameters import ConfigParameters
+from alt_tabpy_server.app.util import (
     log_and_raise,
     parse_pwd_file)
-from tabpy_server.management.state import TabPyState
-from tabpy_server.management.util import _get_state_from_file
-from tabpy_server.psws.callbacks import (init_model_evaluator, init_ps_server)
-from tabpy_server.psws.python_service import (PythonService,
+from alt_tabpy_server.management.state import TabPyState
+from alt_tabpy_server.management.util import _get_state_from_file
+from alt_tabpy_server.psws.callbacks import (init_model_evaluator, init_ps_server)
+from alt_tabpy_server.psws.python_service import (PythonService,
                                               PythonServiceHandler)
-from tabpy_server.handlers import (EndpointHandler, EndpointsHandler,
+from alt_tabpy_server.handlers import (EndpointHandler, EndpointsHandler,
                                    EvaluationPlaneHandler, QueryPlaneHandler,
                                    ServiceInfoHandler, StatusHandler,
                                    UploadDestinationHandler)
@@ -265,7 +265,7 @@ class TabPyApp:
             'an existing file.',
             os.path.isfile(cert),
             os.path.isfile(self.settings['key_file']))
-        tabpy_server.app.util.validate_cert(cert)
+        alt_tabpy_server.app.util.validate_cert(cert)
 
     @staticmethod
     def _validate_cert_key_state(msg, cert_valid, key_valid):

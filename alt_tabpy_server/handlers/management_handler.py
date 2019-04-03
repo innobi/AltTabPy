@@ -5,10 +5,10 @@ import shutil
 from re import compile as _compile
 from uuid import uuid4 as random_uuid
 
-from tabpy_server.handlers import MainHandler
-from tabpy_server.handlers.base_handler import STAGING_THREAD
-from tabpy_server.management.state import get_query_object_path
-from tabpy_server.psws.callbacks import on_state_change
+from alt_tabpy_server.handlers import MainHandler
+from alt_tabpy_server.handlers.base_handler import STAGING_THREAD
+from alt_tabpy_server.management.state import get_query_object_path
+from alt_tabpy_server.psws.callbacks import on_state_change
 
 
 def copy_from_local(localpath, remotepath, is_dir=False):

@@ -1,4 +1,4 @@
-from tabpy_server.handlers import BaseHandler
+from alt_tabpy_server.handlers import BaseHandler
 
 
 class MainHandler(BaseHandler):

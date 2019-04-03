@@ -1,12 +1,9 @@
 import logging
 import os
-try:
-    from ConfigParser import ConfigParser as _ConfigParser
-except ImportError:
-    from configparser import ConfigParser as _ConfigParser
+from configparser import ConfigParser as _ConfigParser
 from datetime import datetime, timedelta, tzinfo
-from tabpy_server.app.ConfigParameters import ConfigParameters
-from tabpy_server.app.util import log_and_raise
+from alt_tabpy_server.app.ConfigParameters import ConfigParameters
+from alt_tabpy_server.app.util import log_and_raise
 from time import mktime
 
 logger = logging.getLogger(__name__)

@@ -3,9 +3,9 @@ import logging
 import sys
 
 
-from tabpy_tools.query_object import QueryObject
-from tabpy_server.common.util import format_exception
-from tabpy_server.common.messages import (
+from alt_tabpy_tools.query_object import QueryObject
+from alt_tabpy_server.common.util import format_exception
+from alt_tabpy_server.common.messages import (
     LoadObject, DeleteObjects, FlushObjects, CountObjects, ListObjects,
     UnknownMessage, LoadFailed, ObjectsDeleted, ObjectsFlushed, QueryFailed,
     QuerySuccessful, UnknownURI, DownloadSkipped, LoadInProgress, ObjectCount,
@@ -13,10 +13,6 @@ from tabpy_server.common.messages import (
 
 
 logger = logging.getLogger(__name__)
-
-
-if sys.version_info.major == 3:
-    unicode = str
 
 
 class PythonServiceHandler:
@@ -151,7 +147,7 @@ class PythonService(object):
             for uri in object_uris:
                 deleted.extend(self.delete_objects(uri).uris)
             return ObjectsDeleted(deleted)
-        elif isinstance(object_uris, str) or isinstance(object_uris, unicode):
+        elif isinstance(object_uris, str):
             deleted_obj = self.query_objects.pop(object_uris, None)
             if deleted_obj:
                 return ObjectsDeleted([object_uris])
