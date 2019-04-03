@@ -9,9 +9,6 @@ at endpoints_handler.py
 import json
 import logging
 from alt_tabpy_server.management.state import get_query_object_path
-from alt_tabpy_server.common.util import format_exception
-from alt_tabpy_server.psws.callbacks import on_state_change
-import shutil
 import tornado.web
 
 
@@ -65,27 +62,20 @@ class EndpointHandler(tornado.web.RequestHandler):
             self.finish()
 
         # update state
-        try:
-            endpoint_info = self.tabpy_state.delete_endpoint(name)
-        except Exception as e:
-            self.send_error(400)
-            self.finish()
+        endpoint_info = self.tabpy_state.delete_endpoint(name)
 
         # delete files
         if endpoint_info['type'] != 'alias':
             delete_path = get_query_object_path(
                 self.settings['state_file_path'], name, None)
-            try:
-                await self._delete_po_future(delete_path)
-            except Exception as e:
-                self.send_error(400)
-                self.finish()
+
+            await self._delete_po_future(delete_path)
 
         self.set_status(204)
         self.finish()
 
     async def _delete_po_future(self, delete_path):
         raise NotImplementedError
-        #future = STAGING_THREAD.submit(shutil.rmtree, delete_path)
-        ret = await future
-        return ret
+        # future = STAGING_THREAD.submit(shutil.rmtree, delete_path)
+        # ret = await future
+        # return ret

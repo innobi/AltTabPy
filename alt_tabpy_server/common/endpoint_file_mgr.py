@@ -15,14 +15,14 @@ from re import compile as _compile
 
 logger = logging.getLogger(__name__)
 
-_name_checker = _compile(r'^[a-zA-Z0-9-_ ]+$')
+_name_checker = _compile(r'^[a-zA-Z0-9_ -]+$')
 
 
-def _check_endpoint_name(name):
+def _check_endpoint_name(name: str):
     """Checks that the endpoint name is valid by comparing it with an RE and
     checking that it is not reserved."""
     if not isinstance(name, str):
-        raise TypeError("Endpoint name must be a string or unicode")
+        raise TypeError("Endpoint name must be a string")
 
     if name == '':
         raise ValueError("Endpoint name cannot be empty")

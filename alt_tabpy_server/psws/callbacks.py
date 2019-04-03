@@ -3,8 +3,6 @@ from time import sleep
 
 from alt_tabpy_server.common.messages import (
     LoadObject, DeleteObjects, ListObjects, ObjectList)
-from alt_tabpy_server.common.endpoint_file_mgr import cleanup_endpoint_files
-from alt_tabpy_server.common.util import format_exception
 from alt_tabpy_server.management.state import TabPyState, get_query_object_path
 
 from alt_tabpy_server.management import util
@@ -123,52 +121,38 @@ def _get_latest_service_state(settings,
 
 
 async def on_state_change(settings, tabpy_state, python_service):
-    try:
-        logger.info("Loading state from state file")
-        config = util._get_state_from_file(settings['state_file_path'])
-        new_ps_state = TabPyState(config=config, settings=settings)
+    logger.info("Loading state from state file")
+    config = util._get_state_from_file(settings['state_file_path'])
+    new_ps_state = TabPyState(config=config, settings=settings)
 
-        (has_changes, changes) = _get_latest_service_state(settings,
-                                                           tabpy_state,
-                                                           new_ps_state,
-                                                           python_service)
-        if not has_changes:
-            logger.info("Nothing changed, return.")
-            return
+    (has_changes, changes) = _get_latest_service_state(settings,
+                                                       tabpy_state,
+                                                       new_ps_state,
+                                                       python_service)
+    if not has_changes:
+        logger.info("Nothing changed, return.")
+        return
 
-        new_endpoints = new_ps_state.get_endpoints()
-        for object_name in changes['endpoints']:
-            (object_type, object_version, object_path) = changes['endpoints'][
-                object_name]
+    new_endpoints = new_ps_state.get_endpoints()
+    for object_name in changes['endpoints']:
+        (object_type, object_version, object_path) = changes['endpoints'][
+            object_name]
 
-            if not object_path and not object_version:  # removal
-                logger.info("Removing object: URI={}".format(object_name))
+        if not object_path and not object_version:  # removal
+            logger.info("Removing object: URI={}".format(object_name))
 
-                python_service.manage_request(DeleteObjects([object_name]))
+            python_service.manage_request(DeleteObjects([object_name]))
 
-                cleanup_endpoint_files(object_name, settings['upload_dir'])
-
+        else:
+            endpoint_info = new_endpoints[object_name]
+            is_update = object_version > 1
+            if object_type == 'alias':
+                msg = LoadObject(object_name, endpoint_info['target'],
+                                 object_version, is_update, 'alias')
             else:
-                endpoint_info = new_endpoints[object_name]
-                is_update = object_version > 1
-                if object_type == 'alias':
-                    msg = LoadObject(object_name, endpoint_info['target'],
-                                     object_version, is_update, 'alias')
-                else:
-                    local_path = object_path
-                    msg = LoadObject(object_name, local_path, object_version,
-                                     is_update, object_type)
+                local_path = object_path
+                msg = LoadObject(object_name, local_path, object_version,
+                                 is_update, object_type)
 
-                python_service.manage_request(msg)
-                wait_for_endpoint_loaded(python_service, object_name)
-
-                # cleanup old version of endpoint files
-                if object_version > 2:
-                    cleanup_endpoint_files(
-                        object_name, settings['upload_dir'], [
-                            object_version, object_version - 1])
-
-    except Exception as e:
-        err_msg = format_exception(e, 'on_state_change')
-        logger.error(
-            "Error submitting update model request: error={}".format(err_msg))
+            python_service.manage_request(msg)
+            wait_for_endpoint_loaded(python_service, object_name)

@@ -7,12 +7,7 @@ at endpoint_handler.py
 '''
 
 import json
-import logging
-from alt_tabpy_server.common.util import format_exception
 import tornado.web
-
-
-logger = logging.getLogger(__name__)
 
 
 class EndpointsHandler(tornado.web.RequestHandler):
@@ -20,13 +15,13 @@ class EndpointsHandler(tornado.web.RequestHandler):
     def get(self):
         self.write(json.dumps(self.tabpy_state.get_endpoints()))
 
-    async def post(self):
+    def post(self):
         if not self.request.body:
             self.send_error(400)
             self.finish()
-            
+
         request_data = json.loads(self.request.body.decode('utf-8'))
-    
+
         name = request_data['name']
 
         # check if endpoint already exist

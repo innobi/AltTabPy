@@ -1,15 +1,12 @@
 import tornado.web
 import logging
-import time
 from alt_tabpy_server.common.messages import (
     Query, QuerySuccessful, QueryError, UnknownURI)
 from hashlib import md5
 import uuid
-import json
-from alt_tabpy_server.common.util import format_exception
 import urllib
 
-from typing import Dict
+from typing import Dict, Tuple, Type
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +23,7 @@ class QueryPlaneHandler(tornado.web.RequestHandler):
                po_name: str,
                data: Dict,
                uid: str,
-               qry: str):
+               qry: str) -> Tuple[Type, Dict]:
         """
         Parameters
         ----------
@@ -45,10 +42,9 @@ class QueryPlaneHandler(tornado.web.RequestHandler):
 
         Returns
         -------
-        out : (result type, dict, int)
+        out : result type, dict
             A triple containing a result type, the result message
-            as a dictionary, and the time in seconds that it took to complete
-            the request.
+            as a dictionary.
         """
         response = self.python_service.ps.query(po_name, data, uid)
 
@@ -56,11 +52,10 @@ class QueryPlaneHandler(tornado.web.RequestHandler):
             response_json = response.to_json()
             self.set_header("Etag", '"%s"' % md5(response_json.encode(
                 'utf-8')).hexdigest())
-            return (QuerySuccessful, response.for_json(), gls_time)
+            return QuerySuccessful, response.for_json()
         else:
             logger.error("Failed query, response: {}".format(response))
-            return (type(response), response.for_json(), gls_time)
-
+            return type(response), response.for_json()
 
     def _handle_result(self, po_name, data, qry, uid):
         (response_type, response, gls_time) = \
@@ -93,7 +88,7 @@ class QueryPlaneHandler(tornado.web.RequestHandler):
         po_obj = self.python_service.ps.query_objects.get(po_name)
 
         if not po_obj:
-            self.send_error(404)  # endpoint doesn't exist            
+            self.send_error(404)  # endpoint doesn't exist
 
         uid = _get_uuid()
 
