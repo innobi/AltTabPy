@@ -13,13 +13,14 @@ from alt_tabpy_server.app.ConfigParameters import ConfigParameters
 from alt_tabpy_server.app.util import parse_pwd_file
 from alt_tabpy_server.management.state import TabPyState
 from alt_tabpy_server.management.util import _get_state_from_file
-from alt_tabpy_server.psws.callbacks import (init_model_evaluator, init_ps_server)
-from alt_tabpy_server.psws.python_service import (PythonService,
-                                              PythonServiceHandler)
-from alt_tabpy_server.handlers import (EndpointHandler, EndpointsHandler,
-                                   EvaluationPlaneHandler, QueryPlaneHandler,
-                                   ServiceInfoHandler, StatusHandler,
-                                   UploadDestinationHandler)
+from alt_tabpy_server.psws.callbacks import (
+    init_model_evaluator, init_ps_server)
+from alt_tabpy_server.psws.python_service import (
+    PythonService, PythonServiceHandler)
+from alt_tabpy_server.handlers import (
+    EndpointHandler, EndpointsHandler, EvaluationPlaneHandler,
+    QueryPlaneHandler, ServiceInfoHandler, StatusHandler,
+    UploadDestinationHandler)
 
 from tornado_json.constants import TORNADO_MAJOR
 

@@ -25,7 +25,7 @@ def validate_cert(cert_file_path):
     if now < not_before:
         raise RuntimeError(
             https_error + 'The certificate provided is not valid until '
-            '{}.'.format(not_before)
+            '{}.'.format(not_before))
     if now > not_after:
         raise RuntimeError(
             https_error + f'The certificate provided expired on {not_after}.')

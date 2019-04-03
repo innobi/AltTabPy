@@ -42,7 +42,7 @@ class EndpointHandler(ManagementHandler):
                                info='Endpoint %s is not found' % endpoint_name)
 
     @tornado.web.asynchronous
-    await def put(self, name):
+    async def put(self, name):
         logger.debug('Processing PUT for /endpoints/{}'.format(name))
         if self.should_fail_with_not_authorized():
             self.fail_with_not_authorized()
