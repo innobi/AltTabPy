@@ -8,7 +8,6 @@ import uuid
 import json
 from alt_tabpy_server.common.util import format_exception
 import urllib
-import sys
 import tornado.web
 
 
@@ -205,10 +204,7 @@ class QueryPlaneHandler(BaseHandler):
             return
 
         start = time.time()
-        if sys.version_info > (3, 0):
-            endpoint_name = urllib.parse.unquote(endpoint_name)
-        else:
-            endpoint_name = urllib.unquote(endpoint_name)
+        endpoint_name = urllib.parse.unquote(endpoint_name)
         logger.debug("GET /query/{}".format(endpoint_name))
         self._process_query(endpoint_name, start)
 
@@ -220,9 +216,6 @@ class QueryPlaneHandler(BaseHandler):
             return
 
         start = time.time()
-        if sys.version_info > (3, 0):
-            endpoint_name = urllib.parse.unquote(endpoint_name)
-        else:
-            endpoint_name = urllib.unquote(endpoint_name)
+        endpoint_name = urllib.parse.unquote(endpoint_name)
         logger.debug("POST /query/{}".format(endpoint_name))
         self._process_query(endpoint_name, start)

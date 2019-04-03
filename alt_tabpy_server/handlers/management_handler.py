@@ -1,6 +1,5 @@
 import logging
 import os
-import sys
 import shutil
 from re import compile as _compile
 from uuid import uuid4 as random_uuid
@@ -64,12 +63,8 @@ class ManagementHandler(MainHandler):
             description = (request_data['description']
                            if 'description' in request_data else None)
             if 'docstring' in request_data:
-                if sys.version_info > (3, 0):
-                    docstring = str(bytes(request_data['docstring'],
-                                          "utf-8").decode('unicode_escape'))
-                else:
-                    docstring = request_data['docstring'].decode(
-                        'string_escape')
+                docstring = str(bytes(request_data['docstring'],
+                                      "utf-8").decode('unicode_escape'))
             else:
                 docstring = None
             endpoint_type = (request_data['type'] if 'type' in request_data
