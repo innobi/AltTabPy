@@ -1,4 +1,4 @@
-from alt_tabpy_server.handlers import BaseHandler
+import tornado.web
 import logging
 import time
 from alt_tabpy_server.common.messages import (
@@ -32,9 +32,7 @@ def _sanitize_request_data(data):
             "key called 'data'")
 
 
-class QueryPlaneHandler(BaseHandler):
-    def initialize(self, app):
-        super(QueryPlaneHandler, self).initialize(app)
+class QueryPlaneHandler(tornado.web.RequestHandler):
 
     def _query(self, po_name, data, uid, qry):
         """

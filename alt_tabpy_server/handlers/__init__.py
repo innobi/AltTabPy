@@ -1,8 +1,4 @@
 # flake8: noqa
-from alt_tabpy_server.handlers.base_handler import BaseHandler
-from alt_tabpy_server.handlers.main_handler import MainHandler
-from alt_tabpy_server.handlers.management_handler import ManagementHandler
-
 from alt_tabpy_server.handlers.endpoint_handler import EndpointHandler
 from alt_tabpy_server.handlers.endpoints_handler import EndpointsHandler
 from alt_tabpy_server.handlers.evaluation_plane_handler import (

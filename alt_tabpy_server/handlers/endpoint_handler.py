@@ -6,22 +6,19 @@ For how generic endpoints requests is served look
 at endpoints_handler.py
 '''
 
-from alt_tabpy_server.handlers import ManagementHandler
 import json
 import logging
 from alt_tabpy_server.management.state import get_query_object_path
 from alt_tabpy_server.common.util import format_exception
-from alt_tabpy_server.handlers.base_handler import STAGING_THREAD
 from alt_tabpy_server.psws.callbacks import on_state_change
 import shutil
+import tornado.web
 
 
 logger = logging.getLogger(__name__)
 
 
-class EndpointHandler(ManagementHandler):
-    def initialize(self, app):
-        super(EndpointHandler, self).initialize(app)
+class EndpointHandler(tornado.web.RequestHandler):
 
     def get(self, endpoint_name):
         logger.debug('Processing GET for /endpoints/{}'.format(endpoint_name))
@@ -132,6 +129,7 @@ class EndpointHandler(ManagementHandler):
         on_state_change(self.settings, self.tabpy_state, self.python_service)
 
     async def _delete_po_future(self, delete_path):
-        future = STAGING_THREAD.submit(shutil.rmtree, delete_path)
+        raise NotImplementedError
+        #future = STAGING_THREAD.submit(shutil.rmtree, delete_path)
         ret = await future
         return ret

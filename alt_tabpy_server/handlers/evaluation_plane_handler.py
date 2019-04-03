@@ -1,8 +1,8 @@
-from alt_tabpy_server.handlers import BaseHandler
 import json
 import logging
 from alt_tabpy_server.common.util import format_exception
 import requests
+import tornado.web
 
 
 logger = logging.getLogger(__name__)
@@ -24,14 +24,10 @@ class RestrictedTabPy:
         return response.json()
 
 
-class EvaluationPlaneHandler(BaseHandler):
+class EvaluationPlaneHandler(tornado.web.RequestHandler):
     '''
     EvaluationPlaneHandler is responsible for running arbitrary python scripts.
     '''
-
-    def initialize(self, executor, app):
-        super(EvaluationPlaneHandler, self).initialize(app)
-        self.executor = executor
 
     async def post(self):
         logger.debug('Processing POST for /evaluate')

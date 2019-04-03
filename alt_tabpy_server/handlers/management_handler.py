@@ -4,7 +4,8 @@ import shutil
 from re import compile as _compile
 from uuid import uuid4 as random_uuid
 
-from alt_tabpy_server.handlers import MainHandler
+import tornado.web
+
 from alt_tabpy_server.handlers.base_handler import STAGING_THREAD
 from alt_tabpy_server.management.state import get_query_object_path
 from alt_tabpy_server.psws.callbacks import on_state_change
@@ -31,10 +32,7 @@ def copy_from_local(localpath, remotepath, is_dir=False):
         shutil.copy(localpath, remotepath)
 
 
-class ManagementHandler(MainHandler):
-    def initialize(self, app):
-        super(ManagementHandler, self).initialize(app)
-        self.port = self.settings['port']
+class ManagementHandler(tornado.web.RequestHandler):
 
     def _get_protocol(self):
         return 'http://'

@@ -1,14 +1,13 @@
 import logging
-from alt_tabpy_server.handlers import ManagementHandler
 import os
-
+import tornado.web
 
 logger = logging.getLogger(__name__)
 
 _QUERY_OBJECT_STAGING_FOLDER = 'staging'
 
 
-class UploadDestinationHandler(ManagementHandler):
+class UploadDestinationHandler(tornado.web.RequestHandler):
     def initialize(self, app):
         super(UploadDestinationHandler, self).initialize(app)
 

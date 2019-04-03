@@ -6,18 +6,16 @@ For how individual endpoint requests are served look
 at endpoint_handler.py
 '''
 
-from alt_tabpy_server.handlers import ManagementHandler
 import json
 import logging
 from alt_tabpy_server.common.util import format_exception
+import tornado.web
 
 
 logger = logging.getLogger(__name__)
 
 
-class EndpointsHandler(ManagementHandler):
-    def initialize(self, app):
-        super(EndpointsHandler, self).initialize(app)
+class EndpointsHandler(tornado.web.RequestHandler):
 
     def get(self):
         if self.should_fail_with_not_authorized():

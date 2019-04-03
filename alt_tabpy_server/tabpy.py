@@ -7,12 +7,18 @@ from alt_tabpy_server.handlers import (
     UploadDestinationHandler)
 
 
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write("Hello, world")
+
+
+PORT = 9004
+
+
 if __name__ == '__main__':
-    app = tornado.Web.Application(
+    app = tornado.web.Application(
         [
-            # skip MainHandler to use StaticFileHandler .* page requests and
-            # default to index.html
-            # (r"/", MainHandler),
+            (r"/", MainHandler),
             (r'/query/([^/]+)', QueryPlaneHandler),
             (r'/status', StatusHandler),
             (r'/info', ServiceInfoHandler),
@@ -20,8 +26,8 @@ if __name__ == '__main__':
             (r'/endpoints/([^/]+)?', EndpointHandler),
             (r'/evaluate', EvaluationPlaneHandler),
             (r'/configurations/endpoint_upload_destination',
-             UploadDestinationHandler)
-            (r'/(.*)', tornado.web.StaticFileHandler)
+             UploadDestinationHandler),
+            (r'/(.*)', tornado.web.StaticFileHandler),
         ])
-    app.listen(9004)
+    app.listen(PORT)
     tornado.ioloop.IOLoop.current().start()

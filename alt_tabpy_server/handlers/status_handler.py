@@ -1,14 +1,12 @@
 import json
 import logging
-from alt_tabpy_server.handlers import BaseHandler
+import tornado.web
 
 
 logger = logging.getLogger(__name__)
 
 
-class StatusHandler(BaseHandler):
-    def initialize(self, app):
-        super(StatusHandler, self).initialize(app)
+class StatusHandler(tornado.web.RequestHandler):
 
     def get(self):
         if self.should_fail_with_not_authorized():
