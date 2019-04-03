@@ -8,14 +8,6 @@ from OpenSSL import crypto
 logger = logging.getLogger(__name__)
 
 
-def log_and_raise(msg, exception_type):
-    '''
-    Log the message and raise an exception of specified type
-    '''
-    logger.fatal(msg)
-    raise exception_type(msg)
-
-
 def validate_cert(cert_file_path):
     with open(cert_file_path, 'r') as f:
         cert_buf = f.read()
@@ -31,13 +23,12 @@ def validate_cert(cert_file_path):
 
     https_error = 'Error using HTTPS: '
     if now < not_before:
-        log_and_raise(https_error +
-                      'The certificate provided is not valid until {}.'.format(
-                          not_before), RuntimeError)
+        raise RuntimeError(
+            https_error + 'The certificate provided is not valid until '
+            '{}.'.format(not_before)
     if now > not_after:
-        log_and_raise(https_error +
-                      f'The certificate provided expired on {not_after}.',
-                      RuntimeError)
+        raise RuntimeError(
+            https_error + f'The certificate provided expired on {not_after}.')
 
 
 def parse_pwd_file(pwd_file_name):

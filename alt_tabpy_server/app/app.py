@@ -10,9 +10,7 @@ from argparse import ArgumentParser
 import alt_tabpy_server
 from alt_tabpy_server import __version__
 from alt_tabpy_server.app.ConfigParameters import ConfigParameters
-from alt_tabpy_server.app.util import (
-    log_and_raise,
-    parse_pwd_file)
+from alt_tabpy_server.app.util import parse_pwd_file
 from alt_tabpy_server.management.state import TabPyState
 from alt_tabpy_server.management.util import _get_state_from_file
 from alt_tabpy_server.psws.callbacks import (init_model_evaluator, init_ps_server)
@@ -76,7 +74,7 @@ class TabPyApp:
                 'keyfile': self.settings['key_file']
             })
         else:
-            log_and_raise('Unsupported transfer protocol.', RuntimeError)
+            raise RuntimeError('Unsupported transfer protocol.')
 
         logger.info('Web service listening on port {}'.format(
             str(self.settings['port'])))
@@ -232,9 +230,9 @@ class TabPyApp:
                       ConfigParameters.TABPY_PWD_FILE)
         if ConfigParameters.TABPY_PWD_FILE in self.settings:
             if not self._parse_pwd_file():
-                log_and_raise('Failed to read passwords file %s' %
-                              self.settings[ConfigParameters.TABPY_PWD_FILE],
-                              RuntimeError)
+                raise RuntimeError(
+                    'Failed to read passwords file %s' %
+                    self.settings[ConfigParameters.TABPY_PWD_FILE])
         else:
             logger.info("Password file is not specified")
 
@@ -243,8 +241,8 @@ class TabPyApp:
 
     def _validate_transfer_protocol_settings(self):
         if 'transfer_protocol' not in self.settings:
-            log_and_raise(
-                'Missing transfer protocol information.', RuntimeError)
+            raise RuntimeError(
+                'Missing transfer protocol information.')
 
         protocol = self.settings['transfer_protocol']
 
@@ -252,8 +250,8 @@ class TabPyApp:
             return
 
         if protocol != 'https':
-            log_and_raise('Unsupported transfer protocol: {}.'.format(
-                protocol), RuntimeError)
+            raise RuntimeError('Unsupported transfer protocol: {}.'.format(
+                protocol))
 
         self._validate_cert_key_state('The parameter(s) {} must be set.',
                                       'certificate_file' in self.settings,
@@ -283,7 +281,7 @@ class TabPyApp:
             err = https_error + msg.format(ConfigParameters.TABPY_KEY_FILE)
 
         if err is not None:
-            log_and_raise(err, RuntimeError)
+            raise RuntimeError(err)
 
     def _parse_pwd_file(self):
         succeeded, self.credentials = parse_pwd_file(
