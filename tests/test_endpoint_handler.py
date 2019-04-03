@@ -7,7 +7,7 @@ class TestEndpointHandlerWithAuth(AsyncHTTPTestCase):
         raise NotImplementedError
 
     def test_invalid_creds_fails(self):
-        raise NotImplementedError        
+        raise NotImplementedError
 
     def test_valid_creds_pass(self):
         raise NotImplementedError
