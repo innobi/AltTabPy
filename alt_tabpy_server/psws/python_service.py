@@ -190,33 +190,14 @@ class PythonService(object):
 
     def query(self, object_uri, params, uid):
         """Execute a QueryObject query"""
-        try:
-            if not isinstance(params, dict) and not isinstance(params, list):
-                return QueryFailed(
-                    uri=object_uri,
-                    error=("Query parameter needs to be a dictionary or a list"
-                           ". Given value is of type %s." % type(params)))
+        obj_info = self.query_objects.get(object_uri)
+        if obj_info:
+            pred_obj = obj_info['endpoint_obj']
+            version = obj_info['version']
 
-            obj_info = self.query_objects.get(object_uri)
-            if obj_info:
-                pred_obj = obj_info['endpoint_obj']
-                version = obj_info['version']
-
-                if not pred_obj:
-                    return QueryFailed(
-                        uri=object_uri,
-                        error=("There is no query object associated to the "
-                               "endpoint: %s" % object_uri))
-
-                if isinstance(params, dict):
-                    result = pred_obj.query(**params)
-                else:
-                    result = pred_obj.query(*params)
-
-                return QuerySuccessful(object_uri, version, result)
+            if isinstance(params, dict):
+                result = pred_obj.query(**params)
             else:
-                return UnknownURI(object_uri)
-        except Exception as e:
-            err_msg = format_exception(e, '/query')
-            logger.error(err_msg)
-            return QueryFailed(uri=object_uri, error=err_msg)
+                result = pred_obj.query(*params)
+
+            return QuerySuccessful(object_uri, version, result)
