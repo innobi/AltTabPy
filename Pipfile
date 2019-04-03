@@ -12,6 +12,7 @@ pytest-cov = "*"
 pytest-xdist = "*"
 
 [packages]
+tornado = "*"
 
 [requires]
 python_version = "3.7"
