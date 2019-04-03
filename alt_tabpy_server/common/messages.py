@@ -1,4 +1,4 @@
-import json as simplejson
+import json
 import abc
 from abc import ABCMeta
 from collections import namedtuple
@@ -27,11 +27,11 @@ class Msg(object):
 
     @abc.abstractmethod
     def to_json(self):
-        return simplejson.dumps(self.for_json())
+        return json.dumps(self.for_json())
 
     @staticmethod
     def from_json(str):
-        d = simplejson.loads(str)
+        d = json.loads(str)
         type_str = d['type']
         del d['type']
         return eval(type_str)(**d)

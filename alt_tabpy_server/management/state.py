@@ -1,13 +1,8 @@
 import logging
-try:
-    from ConfigParser import ConfigParser
-except ImportError:
-    from configparser import ConfigParser
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
-import json as simplejson
+from configparser import ConfigParser
+
+from io import StringIO
+import json
 from threading import Lock
 from time import time
 import sys
@@ -16,9 +11,6 @@ import sys
 from tabpy_server.management.util import write_state_config
 
 logger = logging.getLogger(__name__)
-
-if sys.version_info.major == 3:
-    unicode = str
 
 # State File Config Section Names
 _DEPLOYMENT_SECTION_NAME = 'Query Objects Service Versions'
@@ -165,7 +157,7 @@ class TabPyState(object):
             return {}
 
         if name:
-            endpoint_info = simplejson.loads(endpoint_names)
+            endpoint_info = json.loads(endpoint_names)
             docstring = self._get_config_value(_QUERY_OBJECT_DOCSTRING, name)
             if sys.version_info > (3, 0):
                 endpoint_info['docstring'] = str(
@@ -175,7 +167,7 @@ class TabPyState(object):
             endpoints = {name: endpoint_info}
         else:
             for endpoint_name in endpoint_names:
-                endpoint_info = simplejson.loads(self._get_config_value(
+                endpoint_info = json.loads(self._get_config_value(
                     _DEPLOYMENT_SECTION_NAME, endpoint_name))
                 docstring = self._get_config_value(_QUERY_OBJECT_DOCSTRING,
                                                    endpoint_name, True, '')
@@ -275,7 +267,7 @@ class TabPyState(object):
                                        _update_revision=False)
                 del info['docstring']
                 self._set_config_value(_DEPLOYMENT_SECTION_NAME,
-                                       endpoint_name, simplejson.dumps(info))
+                                       endpoint_name, json.dumps(info))
             except Exception as e:
                 logger.error("Unable to write endpoints config: %s" % e)
                 raise
