@@ -1,6 +1,5 @@
 from tabpy_server.handlers import BaseHandler
 import tornado.web
-from tornado import gen
 import json
 import logging
 from tabpy_server.common.util import format_exception
@@ -36,8 +35,7 @@ class EvaluationPlaneHandler(BaseHandler):
         self.executor = executor
 
     @tornado.web.asynchronous
-    @gen.coroutine
-    def post(self):
+    async def post(self):
         logger.debug('Processing POST for /evaluate')
         if self.should_fail_with_not_authorized():
             self.fail_with_not_authorized()
@@ -81,7 +79,7 @@ class EvaluationPlaneHandler(BaseHandler):
             logger.info(
                 "function to evaluate=%s" % function_to_evaluate)
 
-            result = yield self.call_subprocess(function_to_evaluate,
+            result = await self.call_subprocess(function_to_evaluate,
                                                 arguments)
             if result is None:
                 self.error_out(400, 'Error running script. No return value')

@@ -2,8 +2,6 @@ import logging
 import sys
 from time import sleep
 
-from tornado import gen
-
 from tabpy_server.common.messages import (
     LoadObject, DeleteObjects, ListObjects, ObjectList)
 from tabpy_server.common.endpoint_file_mgr import cleanup_endpoint_files
@@ -39,8 +37,7 @@ def wait_for_endpoint_loaded(python_service, object_uri):
         sleep(0.1)
 
 
-@gen.coroutine
-def init_ps_server(settings, tabpy_state):
+async def init_ps_server(settings, tabpy_state):
     logger.info("Initializing TabPy Server...")
     existing_pos = tabpy_state.get_endpoints()
     for (object_name, obj_info) in (
@@ -56,8 +53,7 @@ def init_ps_server(settings, tabpy_state):
                          ', error: %s' % (object_name, e))
 
 
-@gen.coroutine
-def init_model_evaluator(settings, tabpy_state, python_service):
+async def init_model_evaluator(settings, tabpy_state, python_service):
     '''
     This will go through all models that the service currently have and
     initialize them.
@@ -132,8 +128,7 @@ def _get_latest_service_state(settings,
     return (True, changes)
 
 
-@gen.coroutine
-def on_state_change(settings, tabpy_state, python_service):
+async def on_state_change(settings, tabpy_state, python_service):
     try:
         logger.info("Loading state from state file")
         config = util._get_state_from_file(settings['state_file_path'])

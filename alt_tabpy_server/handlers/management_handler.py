@@ -5,16 +5,10 @@ import shutil
 from re import compile as _compile
 from uuid import uuid4 as random_uuid
 
-from tornado import gen
-
 from tabpy_server.handlers import MainHandler
 from tabpy_server.handlers.base_handler import STAGING_THREAD
 from tabpy_server.management.state import get_query_object_path
 from tabpy_server.psws.callbacks import on_state_change
-
-
-if sys.version_info.major == 3:
-    unicode = str
 
 
 def copy_from_local(localpath, remotepath, is_dir=False):
@@ -46,19 +40,18 @@ class ManagementHandler(MainHandler):
     def _get_protocol(self):
         return 'http://'
 
-    @gen.coroutine
-    def _add_or_update_endpoint(self, action, name, version, request_data):
+    async def _add_or_update_endpoint(self, action, name, version, request_data):
         '''
         Add or update an endpoint
         '''
         logging.debug("Adding/updating model {}...".format(name))
         _name_checker = _compile('^[a-zA-Z0-9-_\\s]+$')
-        if not isinstance(name, (str, unicode)):
+        if not isinstance(name, str):
             raise TypeError("Endpoint name must be a string")
 
         if not _name_checker.match(name):
-            raise gen.Return('endpoint name can only contain: a-z, A-Z, 0-9,'
-                             ' underscore, hyphens and spaces.')
+            return ('endpoint name can only contain: a-z, A-Z, 0-9,'
+                    ' underscore, hyphens and spaces.')
 
         if self.settings.get('add_or_updating_endpoint'):
             raise RuntimeError("Another endpoint update is already in progress"
@@ -96,21 +89,20 @@ class ManagementHandler(MainHandler):
             _path_checker = _compile('^[\\a-zA-Z0-9-_\\s/]+$')
             # copy from staging
             if src_path:
-                if not isinstance(request_data['src_path'], (str, unicode)):
-                    raise gen.Return("src_path must be a string.")
+                if not isinstance(request_data['src_path'], str):
+                    return "src_path must be a string."
                 if not _path_checker.match(src_path):
-                    raise gen.Return('Endpoint name can only contain: a-z, A-'
-                                     'Z, 0-9,underscore, hyphens and spaces.')
+                    return ('Endpoint name can only contain: a-z, A-'
+                            'Z, 0-9,underscore, hyphens and spaces.')
 
-                yield self._copy_po_future(src_path, target_path)
+                await self._copy_po_future(src_path, target_path)
             elif endpoint_type != 'alias':
-                raise gen.Return("src_path is required to add/update an "
-                                 "endpoint.")
+                return "src_path is required to add/update an endpoint."
 
             # alias special logic:
             if endpoint_type == 'alias':
                 if not target:
-                    raise gen.Return('Target is required for alias endpoint.')
+                    return 'Target is required for alias endpoint.'
                 dependencies = [target]
 
             # update local config
@@ -138,7 +130,7 @@ class ManagementHandler(MainHandler):
                         version=version)
 
             except Exception as e:
-                raise gen.Return("Error when changing TabPy state: %s" % e)
+                return "Error when changing TabPy state: %s" % e
 
             on_state_change(self.settings,
                             self.tabpy_state,
@@ -147,9 +139,8 @@ class ManagementHandler(MainHandler):
         finally:
             self.settings['add_or_updating_endpoint'] = None
 
-    @gen.coroutine
-    def _copy_po_future(self, src_path, target_path):
+    async def _copy_po_future(self, src_path, target_path):
         future = STAGING_THREAD.submit(copy_from_local, src_path,
                                        target_path, is_dir=True)
-        ret = yield future
-        raise gen.Return(ret)
+        ret = await future
+        return ret
