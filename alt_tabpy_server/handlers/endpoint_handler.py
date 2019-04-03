@@ -15,7 +15,6 @@ from tabpy_server.management.state import get_query_object_path
 from tabpy_server.common.util import format_exception
 from tabpy_server.handlers.base_handler import STAGING_THREAD
 from tabpy_server.psws.callbacks import on_state_change
-import concurrent
 import shutil
 
 

@@ -15,23 +15,22 @@ from re import compile as _compile
 
 logger = logging.getLogger(__name__)
 
-_name_checker = _compile('^[a-zA-Z0-9-_\ ]+$')
+_name_checker = _compile(r'^[a-zA-Z0-9-_ ]+$')
 
 
 def _check_endpoint_name(name):
     """Checks that the endpoint name is valid by comparing it with an RE and
     checking that it is not reserved."""
     if not isinstance(name, str):
-        log_and_raise("Endpoint name must be a string or unicode", TypeError)
+        raise TypeError("Endpoint name must be a string or unicode")
 
     if name == '':
-        log_and_raise("Endpoint name cannot be empty", ValueError)
+        raise ValueError("Endpoint name cannot be empty")
 
     if not _name_checker.match(name):
-        log_and_raise(
+        raise ValueError(
             'Endpoint name can only contain: a-z, A-Z, 0-9,'
-            ' underscore, hyphens and spaces.',
-            ValueError)
+            ' underscore, hyphens and spaces.')
 
 
 def grab_files(directory):

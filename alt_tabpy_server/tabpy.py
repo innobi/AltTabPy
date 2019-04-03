@@ -1,11 +1,27 @@
-from tabpy_server import __version__
-from tabpy_server.app.app import TabPyApp
+import tornado.ioloop
+import tornado.web
 
-
-def main():
-    app = TabPyApp()
-    app.run()
+from tabpy_server.handlers import (EndpointHandler, EndpointsHandler,
+                                   EvaluationPlaneHandler, QueryPlaneHandler,
+                                   ServiceInfoHandler, StatusHandler,
+                                   UploadDestinationHandler)
 
 
 if __name__ == '__main__':
-    main()
+    app = tornado.Web.Application(
+        [
+            # skip MainHandler to use StaticFileHandler .* page requests and
+            # default to index.html
+            # (r"/", MainHandler),
+            (r'/query/([^/]+)', QueryPlaneHandler),
+            (r'/status', StatusHandler),
+            (r'/info', ServiceInfoHandler),
+            (r'/endpoints', EndpointsHandler),
+            (r'/endpoints/([^/]+)?', EndpointHandler),
+            (r'/evaluate', EvaluationPlaneHandler),
+            (r'/configurations/endpoint_upload_destination',
+             UploadDestinationHandler)
+            (r'/(.*)', tornado.web.StaticFileHandler)
+        ])
+    app.listen(9004)
+    tornado.ioloop.IOLoop.current().start()

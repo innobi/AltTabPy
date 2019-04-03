@@ -54,16 +54,10 @@ def load_state_from_str(state_string):
     Convert from String to ConfigParser
     '''
     if state_string:
-        try:
-            config = ConfigParser(allow_no_value=True)
-            config.optionxform = str
-            config.readfp(StringIO(state_string))
-            return config
-        except Exception as e:
-            log_and_raise("Invalid state string %s" % str(e), ValueError)
-    else:
-        log_and_raise("State string is empty!", ValueError)
-
+        config = ConfigParser(allow_no_value=True)
+        config.optionxform = str
+        config.readfp(StringIO(state_string))
+        return config
 
 
 def save_state_to_str(config):
@@ -71,7 +65,7 @@ def save_state_to_str(config):
     Convert from ConfigParser to String
     '''
     if not config:
-        log_and_raise("Invalid config", ValueError)
+        raise ValueError("Invalid config")
     value = None
     try:
         string_f = StringIO()

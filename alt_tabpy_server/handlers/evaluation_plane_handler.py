@@ -5,7 +5,6 @@ import simplejson
 import logging
 from tabpy_server.common.util import format_exception
 import requests
-import sys
 
 
 logger = logging.getLogger(__name__)
@@ -104,20 +103,3 @@ class EvaluationPlaneHandler(BaseHandler):
                     "trying to query did not respond. Please make sure the "
                     "endpoint exists and the correct set of arguments are "
                     "provided.")
-
-    @gen.coroutine
-    def call_subprocess(self, function_to_evaluate, arguments):
-        restricted_tabpy = RestrictedTabPy(self.port)
-        # Exec does not run the function, so it does not block.
-        if sys.version_info > (3, 0):
-            exec(function_to_evaluate, globals())
-        else:
-            exec(function_to_evaluate)
-
-        if arguments is None:
-            future = self.executor.submit(_user_script, restricted_tabpy)
-        else:
-            future = self.executor.submit(_user_script, restricted_tabpy,
-                                          **arguments)
-        ret = yield future
-        raise gen.Return(ret)
