@@ -1,5 +1,4 @@
 from alt_tabpy_server.handlers import BaseHandler
-import tornado.web
 import json
 import logging
 from alt_tabpy_server.common.util import format_exception
@@ -34,7 +33,6 @@ class EvaluationPlaneHandler(BaseHandler):
         super(EvaluationPlaneHandler, self).initialize(app)
         self.executor = executor
 
-    @tornado.web.asynchronous
     async def post(self):
         logger.debug('Processing POST for /evaluate')
         if self.should_fail_with_not_authorized():

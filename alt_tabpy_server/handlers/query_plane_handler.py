@@ -8,7 +8,6 @@ import uuid
 import json
 from alt_tabpy_server.common.util import format_exception
 import urllib
-import tornado.web
 
 
 logger = logging.getLogger(__name__)
@@ -196,7 +195,6 @@ class QueryPlaneHandler(BaseHandler):
 
         return (endpoint_name, all_endpoint_names)
 
-    @tornado.web.asynchronous
     def get(self, endpoint_name):
         logger.debug('Processing GET for /query/{}'.format(endpoint_name))
         if self.should_fail_with_not_authorized():
@@ -208,7 +206,6 @@ class QueryPlaneHandler(BaseHandler):
         logger.debug("GET /query/{}".format(endpoint_name))
         self._process_query(endpoint_name, start)
 
-    @tornado.web.asynchronous
     def post(self, endpoint_name):
         logger.debug('Processing POST for /query/{}'.format(endpoint_name))
         if self.should_fail_with_not_authorized():

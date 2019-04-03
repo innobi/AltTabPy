@@ -9,7 +9,6 @@ at endpoints_handler.py
 from alt_tabpy_server.handlers import ManagementHandler
 import json
 import logging
-import tornado.web
 from alt_tabpy_server.management.state import get_query_object_path
 from alt_tabpy_server.common.util import format_exception
 from alt_tabpy_server.handlers.base_handler import STAGING_THREAD
@@ -41,7 +40,6 @@ class EndpointHandler(ManagementHandler):
                 self.error_out(404, 'Unknown endpoint',
                                info='Endpoint %s is not found' % endpoint_name)
 
-    @tornado.web.asynchronous
     async def put(self, name):
         logger.debug('Processing PUT for /endpoints/{}'.format(name))
         if self.should_fail_with_not_authorized():
@@ -88,7 +86,6 @@ class EndpointHandler(ManagementHandler):
             self.error_out(500, err_msg)
             self.finish()
 
-    @tornado.web.asynchronous
     async def delete(self, name):
         logger.debug('Processing DELETE for /endpoints/{}'.format(name))
         if self.should_fail_with_not_authorized():
