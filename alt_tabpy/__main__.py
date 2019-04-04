@@ -3,7 +3,7 @@ import argparse
 import tornado.ioloop
 import tornado.web
 
-from alt_tabpy_server.handlers import EvaluateHandler
+from alt_tabpy.handlers import EvaluateHandler
 
 
 if __name__ == '__main__':
