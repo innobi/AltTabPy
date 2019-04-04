@@ -21,8 +21,7 @@ class EvaluateHandler(tornado.web.RequestHandler):
 
     @classmethod
     def _request_to_result(cls,
-                           request: tornado.httputil.HTTPServerRequest
-    ) -> str:
+                           request: tornado.httputil.HTTPServerRequest) -> str:
         body = tornado.escape.json_decode(request.body)
 
         user_code = body['script']
