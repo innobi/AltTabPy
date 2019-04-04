@@ -1,4 +1,8 @@
+import ast
 import json
+import textwrap
+from typing import Callable, Dict, List
+
 import requests
 import tornado.web
 
@@ -14,28 +18,33 @@ class EvaluationPlaneHandler(tornado.web.RequestHandler):
     def post(self):
         body = json.loads(self.request.body.decode('utf-8'))
         user_code = body['script']
-        arguments = None
-        arguments_str = ''
-        if 'data' in body:
-            arguments = body['data']
+        kwargs = body.get('data', {})
 
-        if arguments is not None:
-            arguments_expected = []
-            for i in range(1, len(arguments.keys()) + 1):
-                arguments_expected.append('_arg' + str(i))
-
-            if sorted(arguments_expected) == sorted(arguments.keys()):
-                arguments_str = ', ' + ', '.join(arguments.keys())
-
-        function_to_evaluate = ('def _user_script(tabpy'
-                                + arguments_str + '):\n')
-        for u in user_code.splitlines():
-            function_to_evaluate += ' ' + u + '\n'
-
-        breakpoint()
-        result = 1
+        func = self._func_from_request_parts(user_code, list(kwargs.keys()))
+        result = func(**kwargs)
         if result is None:
             self.error_out(400, 'Error running script. No return value')
         else:
             self.write(json.dumps(result))
             self.finish()
+
+    @classmethod
+    def _func_from_request_parts(cls,
+                                 user_code: str,
+                                 arg_names: List[str]) -> Callable:
+        func_name = 'foo'  # arbitrary; used to look up injection in namespace
+        indented = textwrap.indent(user_code, ' ' * 4)  # Follow PEP8 style
+        arguments = ', '.join(arg_names)
+        expr = f"def {func_name}({arguments}):\n{indented}"
+        mod_ast = ast.parse(expr)
+
+        # Inject the function into an arbitrary namespace
+        dummy: Dict[str, Callable] = {}
+        code = compile(mod_ast, 'also_arbitrary', mode='exec')
+        exec(code, dummy)
+
+        return dummy[func_name]
+    
+
+
+        

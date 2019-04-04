@@ -1,13 +1,15 @@
-from tornado.testing import AsyncHTTPTestCase
+import pytest
+
+from alt_tabpy_server.handlers import EvaluationPlaneHandler
 
 
-class TestEvaluationPlainHandlerWithAuth(AsyncHTTPTestCase):
+def test_dynamic_function_building():
 
-    def test_no_creds_required_auth_fails(self):
-        raise NotImplementedError
+    def foo(arg1, arg2):
+        return arg1 + arg2
 
-    def test_invalid_creds_fails(self):
-        raise NotImplementedError
+    body = "return arg1 + arg2"
+    kwargs = {'arg1': [10], 'arg2': [20]}
+    result = EvaluationPlaneHandler._func_from_request_parts(body, kwargs)
 
-    def test_valid_creds_pass(self):
-        raise NotImplementedError
+    assert foo(**kwargs) == result(**kwargs)
