@@ -4,6 +4,7 @@ import textwrap
 from typing import Callable, Dict, List
 
 import requests
+import tornado.escape
 import tornado.web
 
 
@@ -16,17 +17,14 @@ class EvaluateHandler(tornado.web.RequestHandler):
     '''
 
     def post(self):
-        body = json.loads(self.request.body.decode('utf-8'))
+        body = tornado.escape.json_decode(self.request.body)
         user_code = body['script']
         kwargs = body.get('data', {})
 
         func = self._func_from_request_parts(user_code, list(kwargs.keys()))
         result = func(**kwargs)
-        if result is None:
-            self.error_out(400, 'Error running script. No return value')
-        else:
-            self.write(json.dumps(result))
-            self.finish()
+
+        self.write(json.dumps(result))
 
     @classmethod
     def _func_from_request_parts(cls,
