@@ -3,7 +3,6 @@ import json
 import textwrap
 from typing import Callable, Dict, List
 
-import requests
 import tornado.escape
 import tornado.web
 
@@ -42,7 +41,3 @@ class EvaluateHandler(tornado.web.RequestHandler):
         exec(code, dummy)
 
         return dummy[func_name]
-    
-
-
-        

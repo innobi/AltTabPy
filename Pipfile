@@ -13,7 +13,6 @@ pytest-xdist = "*"
 
 [packages]
 tornado = "*"
-requests = "*"
 
 [requires]
 python_version = "3.7"
