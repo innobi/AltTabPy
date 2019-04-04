@@ -4,6 +4,7 @@ import textwrap
 from typing import Callable, Dict, List
 
 import tornado.escape
+import tornado.httputil
 import tornado.web
 
 
@@ -16,14 +17,19 @@ class EvaluateHandler(tornado.web.RequestHandler):
     '''
 
     def post(self):
-        body = tornado.escape.json_decode(self.request.body)
+        self.write(self._request_to_result(self.request))
+
+    @classmethod
+    def _request_to_result(cls,
+                           request: tornado.httputil.HTTPServerRequest
+    ) -> str:
+        body = tornado.escape.json_decode(request.body)
+
         user_code = body['script']
         kwargs = body.get('data', {})
 
-        func = self._func_from_request_parts(user_code, list(kwargs.keys()))
-        result = func(**kwargs)
-
-        self.write(json.dumps(result))
+        func = cls._func_from_request_parts(user_code, list(kwargs.keys()))
+        return json.dumps(func(**kwargs))
 
     @classmethod
     def _func_from_request_parts(cls,
