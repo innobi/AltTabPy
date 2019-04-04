@@ -15,4 +15,5 @@ if __name__ == '__main__':
             (r'/evaluate', EvaluateHandler),
         ])
     app.listen(args.port)
+    print(f"Listening on port {args.port}!")
     tornado.ioloop.IOLoop.current().start()
