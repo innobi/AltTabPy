@@ -8,7 +8,7 @@ AltTabPy is available on `PyPy <https://pypi.org>`_ and can be installed via pip
 
 .. code-block:: bash
 
-   pip install alt_tabpy
+   pip install alt-tabpy
 
 Once installed, you can launch the application via the command line, optionally specifying a port:
 
