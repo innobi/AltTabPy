@@ -3,7 +3,7 @@ import argparse
 import tornado.ioloop
 import tornado.web
 
-from alt_tabpy.handlers import EvaluateHandler
+from alt_tabpy.handlers import EvaluateHandler, InfoHandler
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -12,6 +12,7 @@ if __name__ == '__main__':
 
     app = tornado.web.Application(
         [
+            (r'/info', InfoHandler),
             (r'/evaluate', EvaluateHandler),
         ])
     app.listen(args.port)

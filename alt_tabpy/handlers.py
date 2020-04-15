@@ -46,3 +46,9 @@ class EvaluateHandler(tornado.web.RequestHandler):
         exec(code, dummy)
 
         return dummy[func_name]
+
+
+class InfoHandler(tornado.web.RequestHandler):
+
+    def get(self):
+        self.write(json.dumps({"description": "AltTabPy"}))
